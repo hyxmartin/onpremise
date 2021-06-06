@@ -1,23 +1,27 @@
-#docker-compose stop
-#docker-compose down
-#
-#echo "Created $(docker volume create --name=sentry-clickhouse)."
-#echo "Created $(docker volume create --name=sentry-data)."
-#echo "Created $(docker volume create --name=sentry-kafka)."
-#echo "Created $(docker volume create --name=sentry-postgres)."
-#echo "Created $(docker volume create --name=sentry-redis)."
-#echo "Created $(docker volume create --name=sentry-symbolicator)."
-#echo "Created $(docker volume create --name=sentry-zookeeper)."
+docker-compose stop
+docker-compose down
 
 _group="▶ "
 _endgroup="◀ "
-source .env
+
+if [[ -f .env ]]; then
+  set -a; source .env; set +a
+  echo $SENTRY_IMAGE
+else
+  echo ".env not present"
+fi
 cd install
 
 dc="docker-compose --no-ansi"
 dcr="$dc run --rm"
 
-
+echo "Created $(docker volume create --name=sentry-clickhouse)."
+echo "Created $(docker volume create --name=sentry-data)."
+echo "Created $(docker volume create --name=sentry-kafka)."
+echo "Created $(docker volume create --name=sentry-postgres)."
+echo "Created $(docker volume create --name=sentry-redis)."
+echo "Created $(docker volume create --name=sentry-symbolicator)."
+echo "Created $(docker volume create --name=sentry-zookeeper)."
 
 # A couple of the config files are referenced from other subscripts, so they
 # get vars, while multiple subscripts call ensure_file_from_example.
@@ -361,7 +365,4 @@ else
   echo "-----------------------------------------------------------------"
   echo ""
 fi
-
-
-
 
